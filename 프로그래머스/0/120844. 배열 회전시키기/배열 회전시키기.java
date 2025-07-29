@@ -1,21 +1,16 @@
 class Solution {
     public int[] solution(int[] numbers, String direction) {
-        
-        int length = numbers.length;
+    int[] a = new int[numbers.length];
         
         if(direction.equals("right")){
-        	int r = numbers[length-1];
-            for(int i=1; i<length; i++) {
-            	numbers[length - i] = numbers[length -i - 1];
-            }numbers[0] = r;
-            return numbers;
-        } else {
-        	int r = numbers[0];
-        	for(int i=0; i<length-1;i++) {
-        		numbers[i] = numbers[i+1];
-        	}
-        	numbers[length-1] = r;
-        	return numbers;
+            for(int i=0; i<numbers.length-1; i++){
+                a[i+1] = numbers[i];
+            } a[0] = numbers[numbers.length-1];
+        } else{
+            for(int i=0; i<numbers.length -1; i++){
+                a[i] = numbers[i+1];
+            } a[numbers.length-1] = numbers[0]; 
+        }
+     return a;   
     }
-}
 }
