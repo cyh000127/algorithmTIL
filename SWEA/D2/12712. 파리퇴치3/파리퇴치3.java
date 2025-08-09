@@ -7,74 +7,69 @@ public class Solution {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		// 테스트 케이스 지정
 		int T = Integer.parseInt(br.readLine());
 		for (int test = 1; test <= T; test++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			// 필드 크기 M //스프레이 크기 N
-			int M = Integer.parseInt(st.nextToken());
+			// N은 지도 크기 // M 은 스프레이 범위
 			int N = Integer.parseInt(st.nextToken());
+			int M = Integer.parseInt(st.nextToken());
 
-			int[][] arr = new int[M][M];
-
-			for (int i = 0; i < M; i++) {
+			// 배열 선언 및 값 할당
+			int[][] arr = new int[N][N];
+			for (int i = 0; i < N; i++) {
 				StringTokenizer st2 = new StringTokenizer(br.readLine());
-				for (int j = 0; j < M; j++) {
+				for (int j = 0; j < N; j++) {
 					arr[i][j] = Integer.parseInt(st2.nextToken());
 				}
 			}
-			// + 모양,  자기 위치 포함
-			int[] dc = { -1, 1, 0, 0};
-			int[] dr = { 0, 0, 1, -1};
 
-			// x 모양, 자기 위치 포함
-			int[] drx = { -1, -1, 1, 1};
-			int[] dcx = { -1, 1, -1, 1};
+			// 스프레이 델타배열 선언
+			// +
+			int[] dr = { -1, 1, 0, 0 };
+			int[] dc = { 0, 0, -1, 1 };
+			// x
+			int[] drx = { -1, -1, 1, 1 };
+			int[] dcx = { 1, -1, 1, -1 };
 
-			// +로 최대로 잡을 수 있는 파리수 탐색
-			int plusMax = 0;
-			// 스프레이의 중심 기준
-			for (int i = 0; i < M-1; i++) {
-				for (int j = 0; j < M-1; j++) {
+			int maxPlus = 0;
+			// + 스프레이 최대 파리
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < N; j++) {
 					int cnt = arr[i][j];
-					// 방향 벡터 반복문
 					for (int d = 0; d < 4; d++) {
-						// 스프레이 크기 만큼을 곱하고 반복
-						for (int n = 1; n < N; n++) {
-							int nr = i + (dr[d] * n);
-							int nc = j + (dc[d] * n);
-							// 범위 벗언면 continue
-							if (nr < 0 || nr >= M || nc < 0 || nc >= M)
+						for (int a = 1; a < M; a++) {
+							int nr = i + (dr[d] * a);
+							int nc = j + (dc[d] * a);
+
+							if (nr >= N || nr < 0 || nc >= N || nc < 0)
 								continue;
 							cnt += arr[nr][nc];
 						}
 					}
-					plusMax = Math.max(plusMax, cnt);
+					maxPlus = Math.max(maxPlus, cnt);
 				}
 			}
-			// X로 최대로 잡을 수 있는 파리수 탐색
-			int X_Max = 0;
-			// 스프레이의 중심 기준
-			for (int i = 0; i < M-1; i++) {
-				for (int j = 0; j < M-1; j++) {
+
+			int maxX = 0;
+			// + 스프레이 최대 파리
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < N; j++) {
 					int cnt = arr[i][j];
-					// 방향 벡터 반복문
 					for (int d = 0; d < 4; d++) {
-						// 스프레이 크기 만큼을 곱하고 반복
-						for (int n = 1; n < N; n++) {
-							int nr = i + (drx[d] * n);
-							int nc = j + (dcx[d] * n);
-							// 범위 벗언면 continue
-							if (nr < 0 || nr >= M || nc < 0 || nc >= M)
+						for (int a = 1; a < M; a++) {
+							int nr = i + (drx[d] * a);
+							int nc = j + (dcx[d] * a);
+
+							if (nr >= N || nr < 0 || nc >= N || nc < 0)
 								continue;
 							cnt += arr[nr][nc];
 						}
 					}
-					X_Max = Math.max(X_Max, cnt);
+					maxX = Math.max(maxX, cnt);
 				}
 			}
-			
-		System.out.println("#"+test+" "+Math.max(X_Max, plusMax));	
+			int ans = Math.max(maxPlus, maxX);
+			System.out.println("#" + test + " " + ans);
 		}
 	}
 }
