@@ -7,37 +7,40 @@ public class Solution {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		// 테스트 케이스 지정
 		int T = Integer.parseInt(br.readLine());
 		for (int test = 1; test <= T; test++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			// 필드 크기 M //파리채 크기 N
+			// M 은 지도 크기, N 은 파리채 크기
 			int M = Integer.parseInt(st.nextToken());
 			int N = Integer.parseInt(st.nextToken());
 
 			int[][] arr = new int[M][M];
 
+			// 2차원 배열에 파리 넣기
 			for (int i = 0; i < M; i++) {
 				StringTokenizer st2 = new StringTokenizer(br.readLine());
 				for (int j = 0; j < M; j++) {
 					arr[i][j] = Integer.parseInt(st2.nextToken());
 				}
 			}
-			// 정답
-			int ans = 0 ;
-			// 파리채 범위만큼 뺀 범위의 반복문
+
+			int maxCnt = 0 ;
+			// 기존 배열에서 파리채 크기 만큼의 파리를 잡은 후
+			// 가장 많은 파리를 잡은 마릿 수 출력
 			for (int i = 0; i < M - N + 1; i++) {
 				for (int j = 0; j < M - N + 1; j++) {
 					int cnt = 0;
-					for (int r = 0; r < N; r++) {
-						for (int c = 0; c < N; c++) {
-							cnt += arr[i + c][j + r];
+					for (int a = 0; a < N; a++) {
+						for (int b = 0; b < N; b++) {
+							cnt += arr[i + a][j + b];
 						}
 					}
-					ans = Math.max(ans, cnt);
+					maxCnt = Math.max(maxCnt, cnt);
 				}
 			}
-			System.out.println("#"+test+" "+ans);
+
+			System.out.println("#"+test+" "+maxCnt);
 		}
+
 	}
 }
