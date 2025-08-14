@@ -24,7 +24,7 @@ public class Solution {
 			// 단조증가가 없으면 -1 출력
 			int ans = -1;
 			for (int i = 0; i < N; i++) {
-				for (int j = 0; j < N; j++) {
+				for (int j = i; j<N; j++) {
 					if(i == j) continue; 
 					int target= arr[i] * arr[j];
 					boolean isTrue = true;
