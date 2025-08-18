@@ -28,9 +28,11 @@ public class Main {
 		int roomCnt = 0;
 		for (int i = 1; i <= 6; i++) {
 			for (int j = 0; j < 2; j++) {
-				if(arr[i][j] %2 == 1) roomCnt+= (arr[i][j]/2)+1;
-				else if (arr[i][j]%2 == 0 ) roomCnt+=arr[i][j]/2;
-			} 
+				if (arr[i][j] % K == 0)
+					roomCnt += arr[i][j] / K;
+				else
+					roomCnt += (arr[i][j] / K) + 1;
+			}
 		}
 		System.out.println(roomCnt);
 	}
