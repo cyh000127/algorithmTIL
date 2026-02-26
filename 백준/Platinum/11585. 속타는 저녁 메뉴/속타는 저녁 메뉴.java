@@ -6,7 +6,6 @@ import java.io.*;
  */
 public class Main {
 	static int N;
-	static StringBuilder sb;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -18,57 +17,31 @@ public class Main {
 
 		// 그러니까 첫 줄의 문장이
 		// 둘째 줄의 문장에서 (돌림판) 나타나면 고기를 먹는다는거지 ?
-
 		N = Integer.parseInt(br.readLine());
 
-		// Char 배열 선언
-		char[] first = new char[N];
-		char[] second = new char[2 * N];
+		char[] arr = new char[N];
+		String str = br.readLine();
 
-		String str;
-		str = br.readLine();
+		// 정답을 위한 cnt
+		int cnt = 1;
+
 		for (int i = 0; i < N; i++) {
-			first[i] = str.charAt(i * 2);
+			arr[i] = str.charAt(i * 2);
 		}
 
-		str = br.readLine();
-		
-		// 돌림판이기 때문에 
-		for (int i = 0; i < N; i++) {
-			second[i] = str.charAt(i * 2);
-			second[i + N] = str.charAt(i * 2);
+		int len = N - findPi(arr)[N - 1];
+
+		if (N % len == 0) {
+			cnt = N / len;
 		}
 
-		kmp(first, second);
-	}
-
-	private static void kmp(char[] first, char[] second) {
-		// length == N;
-		int idx = 0;
-		int[] Pi = findPi(first);
-
-		// 문장 발견 계산 cnt
-		int cnt = 0;
-		for (int i = 1; i < 2 * N; i++) {
-			while (idx > 0 && second[i] != second[idx]) {
-				idx = Pi[idx - 1];
-			}
-
-			if (second[i] == second[idx]) {
-				idx++;
-			}
-
-			if (idx == N) {
-				cnt++;
-				idx = Pi[idx - 1];
-			}
-		}
 		// 다 끝난 후 기약분수로 변환
 		// 기약분수는 최대공약수로 나누어야함
+
 		int g = gcd(cnt, N);
-		
 		// 출력
 		System.out.println((cnt / g) + "/" + (N / g));
+
 	}
 
 	// 최대공약수 계산 로직
