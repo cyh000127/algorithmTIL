@@ -20,12 +20,13 @@ public class Main {
 
 		char[] arr = new char[N];
 		String str = br.readLine();
-
+		StringBuilder sb = new StringBuilder();
+		
 		// 정답을 위한 cnt
 		int cnt = 1;
 
-		for (int i = 0, j = 0; j < N; i += 2, j++) {
-			arr[j] = str.charAt(i);
+		for (int i = 0; i < N; i++) {
+			arr[i] = str.charAt(i << 1);
 		}
 
 		int len = N - findPi(arr)[N - 1];
@@ -39,7 +40,8 @@ public class Main {
 
 		int g = gcd(cnt, N);
 		// 출력
-		System.out.println((cnt / g) + "/" + (N / g));
+		sb.append((cnt / g)).append("/").append((N / g));
+		System.out.println(sb.toString());
 
 	}
 
