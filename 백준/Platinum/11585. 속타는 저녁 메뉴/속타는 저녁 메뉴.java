@@ -5,7 +5,6 @@ import java.io.*;
  * 11585 속타는 저녁 메뉴
  */
 public class Main {
-	static int N;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -17,7 +16,7 @@ public class Main {
 
 		// 그러니까 첫 줄의 문장이
 		// 둘째 줄의 문장에서 (돌림판) 나타나면 고기를 먹는다는거지 ?
-		N = Integer.parseInt(br.readLine());
+		int N = Integer.parseInt(br.readLine());
 
 		char[] arr = new char[N];
 		String str = br.readLine();
@@ -25,8 +24,8 @@ public class Main {
 		// 정답을 위한 cnt
 		int cnt = 1;
 
-		for (int i = 0; i < N; i++) {
-			arr[i] = str.charAt(i * 2);
+		for (int i = 0, j = 0; j < N; i += 2, j++) {
+			arr[j] = str.charAt(i);
 		}
 
 		int len = N - findPi(arr)[N - 1];
@@ -55,7 +54,7 @@ public class Main {
 	}
 
 	private static int[] findPi(char[] first) {
-		// length == N
+		int N = first.length;
 		int idx = 0;
 		int[] Pi = new int[N];
 
