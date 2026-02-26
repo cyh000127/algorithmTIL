@@ -19,25 +19,17 @@ public class Main {
 
 		// 맨 앞에 kmp의 cnt 값 삽입
 		int ans = kmp(sb, P, T);
-		sb.insert(0, '\n').insert(0, ans);
-
-		System.out.println(sb.toString().trim());
-	}
-
-	private static char[] toCharArray(String x, int n) {
-		char[] arr = new char[n];
-		for (int i = 0; i < n; i++) {
-			arr[i] = x.charAt(i);
-		}
-		return arr;
+//		sb.insert(0, '\n').insert(0, ans);
+		System.out.println(ans);
+		System.out.println(sb.toString());
 	}
 
 	private static int kmp(StringBuilder sb, String str1, String str2) {
 		int len1 = str1.length();
 		int len2 = str2.length();
 
-		char[] arr1 = toCharArray(str1, len1);
-		char[] arr2 = toCharArray(str2, len2);
+		char[] arr1 = str1.toCharArray();
+		char[] arr2 = str2.toCharArray();
 
 		int[] pi = findPi(arr1);
 		int idx = 0;
