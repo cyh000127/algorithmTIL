@@ -21,12 +21,12 @@ public class Main {
 		char[] arr = new char[N];
 		String str = br.readLine();
 		StringBuilder sb = new StringBuilder();
-		
+
 		// 정답을 위한 cnt
 		int cnt = 1;
 
 		for (int i = 0; i < N; i++) {
-			arr[i] = str.charAt(i << 1);
+			arr[i] = str.charAt(i * 2);
 		}
 
 		int len = N - findPi(arr)[N - 1];
