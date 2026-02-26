@@ -25,8 +25,8 @@ public class Main {
 		// 정답을 위한 cnt
 		int cnt = 1;
 
-		for (int i = 0; i < N; i++) {
-			arr[i] = str.charAt(i * 2);
+		for (int i = 0, j = 0; j < N; i += 2, j++) {
+			arr[j] = str.charAt(i);
 		}
 
 		int len = N - findPi(arr)[N - 1];
