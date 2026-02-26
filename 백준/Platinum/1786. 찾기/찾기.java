@@ -19,30 +19,43 @@ public class Main {
 
 		// 맨 앞에 kmp의 cnt 값 삽입
 		int ans = kmp(sb, P, T);
-		sb.insert(0, "\n").insert(0, ans);
+		sb.insert(0, '\n').insert(0, ans);
 
 		System.out.println(sb.toString().trim());
 	}
 
+	private static char[] toCharArray(String x, int n) {
+		char[] arr = new char[n];
+		for (int i = 0; i < n; i++) {
+			arr[i] = x.charAt(i);
+		}
+		return arr;
+	}
+
 	private static int kmp(StringBuilder sb, String str1, String str2) {
 		int len1 = str1.length();
-		int[] pi = findPi(str1);
+		int len2 = str2.length();
+
+		char[] arr1 = toCharArray(str1, len1);
+		char[] arr2 = toCharArray(str2, len2);
+
+		int[] pi = findPi(arr1);
 		int idx = 0;
 
 		// cnt
 		int cnt = 0;
-		for (int i = 0; i < str2.length(); i++) {
-			while (idx > 0 && str1.charAt(idx) != str2.charAt(i)) {
+		for (int i = 0; i < len2; i++) {
+			while (idx > 0 && arr1[idx] != arr2[i]) {
 				idx = pi[idx - 1];
 			}
 
-			if (str1.charAt(idx) == str2.charAt(i)) {
+			if (arr1[idx] == arr2[i]) {
 				idx++;
 			}
 
 			if (idx == len1) {
 				cnt++;
-				sb.append(i - len1 + 2).append("\n");
+				sb.append(i - len1 + 2).append('\n');
 				idx = pi[idx - 1];
 			}
 
@@ -50,17 +63,17 @@ public class Main {
 		return cnt;
 	}
 
-	private static int[] findPi(String first) {
-		int N = first.length();
+	private static int[] findPi(char[] arr1) {
+		int N = arr1.length;
 		int idx = 0;
 		int[] Pi = new int[N];
 
 		for (int i = 1; i < N; i++) {
-			while (idx > 0 && first.charAt(i) != first.charAt(idx)) {
+			while (idx > 0 && arr1[i] != arr1[idx]) {
 				idx = Pi[idx - 1];
 			}
 
-			if (first.charAt(i) == first.charAt(idx)) {
+			if (arr1[i] == arr1[idx]) {
 				Pi[i] = ++idx;
 			}
 		}
