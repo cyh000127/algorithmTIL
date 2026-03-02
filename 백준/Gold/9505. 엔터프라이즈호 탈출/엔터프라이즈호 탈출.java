@@ -65,11 +65,7 @@ public class Main {
 			PriorityQueue<Node> pq = new PriorityQueue<>();
 			pq.add(new Node(new int[] { enterprise / w, enterprise % w }, 0));
 
-			int[][] dist = new int[h][w];
-			for (int i = 0; i < h; i++)
-				Arrays.fill(dist[i], INF);
-
-			dist[enterprise / w][enterprise % w] = 0;
+			boolean[][] visited = new boolean[h][w];
 
 			int minTime = INF;
 
@@ -80,28 +76,29 @@ public class Main {
 				int cost = curr.cost;
 
 				// 지금 pq에서 뽑은게 한참전에 계산한 것일 수 있음
-				if (cost != dist[loc[0]][loc[1]]) {
+				if (visited[loc[0]][loc[1]]) {
 					continue;
 				}
 
+				visited[loc[0]][loc[1]] = true;
+				
 				// 탈출조건
 				if (loc[0] == 0 || loc[0] == h - 1 || loc[1] == 0 || loc[1] == w - 1) {
-					minTime = Math.min(minTime, cost);
+					minTime = cost;
+					break;
 				}
 
 				for (int i = 0; i < 4; i++) {
 					int nr = loc[0] + dr[i];
 					int nc = loc[1] + dc[i];
 
-					if (nr < h && nr >= 0 && nc < w && nc >= 0) {
+					if (nr < h && nr >= 0 && nc < w && nc >= 0 && !visited[nr][nc]) {
 						int nextCost = cost + warship[map[nr][nc]];
-						if (dist[nr][nc] > nextCost) {
-							dist[nr][nc] = nextCost;
-							pq.add(new Node(new int[] { nr, nc }, nextCost));
-						}
+						pq.add(new Node(new int[] { nr, nc }, nextCost));
 					}
 				}
 			}
+
 			sb.append(minTime).append("\n");
 		}
 		System.out.println(sb.toString().trim());
