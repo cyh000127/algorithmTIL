@@ -1,120 +1,114 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
+/**
+ * 벽 부수고 이동하기 4
+ */
 public class Main {
-	static int[] dr = { 1, -1, 0, 0 };
-	static int[] dc = { 0, 0, 1, -1 };
-
-	static int[][] map, area;
-	static int N, M, cnt;
-	static boolean[][] visited;
-	static List<int[]> areaExtent;
+	static int n, m;
+	static int[][] arr;
+	static Map<Integer, Integer> hash;
+	static int[][] find;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
 
-		// 1. 일단 배열을 받고
-		// 2. 배열의 0 의 크기를 재기
-		// 3. 벽을 조사해서 벽과 맞닿은 0의 크기를 모두 조사
-		// 4. 벽과 길을 모아놓는 배열과 area 배열을 따로 놓기
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		n = Integer.parseInt(st.nextToken());
+		m = Integer.parseInt(st.nextToken());
 
-		st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-
-		map = new int[N][M]; // 지도
-		visited = new boolean[N][M]; // 방문여부
-		area = new int[N][M]; // bfs 후 결과를 담을 area 배열
-
-		for (int i = 0; i < N; i++) {
+		arr = new int[n][m];
+		for (int i = 0; i < n; i++) {
 			String str = br.readLine();
-			for (int j = 0; j < M; j++) {
-				map[i][j] = str.charAt(j) - '0'; // Char -> int로 저장
+			for (int j = 0; j < m; j++) {
+				arr[i][j] = str.charAt(j) - '0';
 			}
 		}
-		areaExtent = new ArrayList<>();
-		bfs();
+		hash = new HashMap<>();
+//		find = new int[n][m];
 
-////		// 디버그용 코드
-//		for (int i = 0; i < N; i++) {
-//			for (int j = 0; j < M; j++) {
-//				System.out.print(area[i][j] + " ");
-//			}
-//			System.out.println();
-//		}
-//		for (int[] e : areaExtent) {
-//			System.out.println(e[0] + " 넓이 : " + e[1]);
-//		}
-
-		// 이제 각 벽을 허물었을때의 넓이를 구해보자
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < M; j++) {
-				if (map[i][j] == 1) {
-					HashSet<Integer> set = new HashSet<>();
-					for (int d = 0; d < 4; d++) {
-						int nr = dr[d] + i;
-						int nc = dc[d] + j;
-						if (nr >= 0 && nr < N && nc >= 0 && nc < M && map[nr][nc] == 0) {
-							set.add(area[nr][nc]);
-						}
-					}
-					for (int a : set) {
-						map[i][j] += areaExtent.get(a - 1)[1]; // 벽의 사방향을 조사한 후 맞닿은 area의 넓이를 더함
-					}
+		// 벽이 1이므로 2로 시작
+		int cnt = 2;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				// 찾은 적 없고 arr의 값이 0이라면
+				if (arr[i][j] == 0) {
+					check(cnt++, i, j);
 				}
 			}
 		}
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < M; j++) {
-				System.out.print(map[i][j]%10);
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				if (arr[i][j] == 1) {
+					int r = i;
+					int c = j;
+					int tmp = 1;
+
+					// 중복 계산 방지
+					Set<Integer> isUsed = new HashSet<>();
+
+					for (int d = 0; d < 4; d++) {
+						int nr = r + dr[d];
+						int nc = c + dc[d];
+
+						if (nr < 0 || nc < 0 || nr >= n || nc >= m) {
+							continue;
+						}
+
+						int loc = arr[nr][nc];
+						// set을 통해 검사 했던건지 검증
+						if (loc >= 2 && !isUsed.contains(loc)) {
+							// 옆에 1이 있다면 그것의 값은 null 일테니 getordefault
+							tmp += hash.getOrDefault(loc, 0);
+							isUsed.add(loc);
+						}
+					}
+					sb.append(tmp % 10);
+				} else {
+					sb.append(0);
+				}
+
+				if (j == m - 1)
+					sb.append("\n");
 			}
-			System.out.println();
 		}
+
+		System.out.println(sb.toString().trim());
 	}
 
-	// 처음 주어진 지도 map
-	// 그 map에서 bfs를 통해 구역번호를 나눈 area
-	// 그 area의 넓이를 담는 areaExtent
-	private static void bfs() {
+	static int[] dr = { -1, 1, 0, 0 };
+	static int[] dc = { 0, 0, 1, -1 };
+
+	// bfs 를 통한 check
+	private static void check(int number, int r, int c) {
 		Queue<int[]> q = new LinkedList<>();
 
-		cnt = 1; // 구역 번호
-		int extent = 1; // 넓이
+		q.add(new int[] { r, c });
+		int cnt = 1;
+		arr[r][c] = number;
+		while (!q.isEmpty()) {
+			int[] curr = q.poll();
+			int rr = curr[0];
+			int cc = curr[1];
 
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < M; j++) {
-				if (map[i][j] == 0 && !visited[i][j]) { // 길이고 방문한적 없다면
-					q.add(new int[] { i, j });
-					visited[i][j] = true;
-					area[i][j] = cnt;
+			for (int d = 0; d < 4; d++) {
+				int nr = rr + dr[d];
+				int nc = cc + dc[d];
 
-					while (!q.isEmpty()) {
-						int[] e = q.poll();
-						for (int d = 0; d < 4; d++) {
-							int nr = dr[d] + e[0];
-							int nc = dc[d] + e[1];
-							if (nr < 0 || nr >= N || nc < 0 || nc >= M)
-								continue;
-							if (!visited[nr][nc] && map[nr][nc] == 0) {
-								// 나아갈 곳이 방문한적 없고 이어져 있다면
-								visited[nr][nc] = true;
-								area[nr][nc] = cnt;
-								extent++;
-								q.add(new int[] { nr, nc });
-								// area에 구역 번호를 부여한 후
-								// 구역번호에 넓이를 저장할 거임
-							}
-						}
-					}
-					areaExtent.add(new int[] { cnt, extent }); // 해당 구역번호의 넓이를 저장
-					extent = 1;
+				if (nr < 0 || nc < 0 || nr >= n || nc >= m) {
+					continue;
+				}
 
-					cnt++; // 한 구역을 찾은 후 cnt ++;
-//					System.out.println(cnt);
+				if (arr[nr][nc] == 0) {
+					// 지도에 number를 넣어주기
+					arr[nr][nc] = number;
+					q.add(new int[] { nr, nc });
+					cnt++;
 				}
 			}
 		}
-
+		// 마지막에 해시에 개수 넣기
+		hash.put(number, cnt);
 	}
 }
