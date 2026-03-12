@@ -1,7 +1,12 @@
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.io.IOException;
+
 public class Main {
-	public static void main(String[] args) {
-		StringBuilder sb = new StringBuilder();
-		sb.append('1').append("\n").append('0');
-		System.out.println(sb);
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        
+        bw.write("1\n0"); 
+        bw.flush();
+    }
 }
