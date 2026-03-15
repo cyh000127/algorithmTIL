@@ -9,12 +9,14 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 
-		int[] g = new int[301];
-		for (int i = 1; i <= 50; i++) {
-			g[Integer.parseInt(st.nextToken())] = i;
-		}
+		int s = Integer.parseInt(br.readLine());
 
-		int s = g[Integer.parseInt(br.readLine())];
+		for (int i = 1; i <= 50; i++) {
+			if (s == Integer.parseInt(st.nextToken())) {
+				s = i;
+				break;
+			}
+		}
 
 		if (s <= 5) {
 			System.out.println("A+");
