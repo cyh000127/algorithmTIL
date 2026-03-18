@@ -7,10 +7,10 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		long a = 1;
-		int s = Integer.parseInt(br.readLine());
+		int s = Integer.parseInt(br.readLine()) + 1;
 
 		while (s > 1) {
-			a *= s--;
+			a *= --s;
 		}
 		System.out.println(a);
 	}
